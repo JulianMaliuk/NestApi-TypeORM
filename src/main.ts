@@ -3,6 +3,9 @@ import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { AppModule } from './app.module';
+import { expressMiddleware as rTracer } from 'cls-rtracer';
+import { requestLogger } from './common/middlewares/request-logger.middleware';
+import { MyLogger } from './common/logger';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
@@ -10,6 +13,8 @@ async function bootstrap() {
   });
 
   // app.setGlobalPrefix('api');
+  app.use(rTracer());
+  app.use(requestLogger);
 
   const options = new DocumentBuilder()
     .setTitle('Personal Area')
@@ -29,5 +34,7 @@ async function bootstrap() {
 
   const config = app.get(ConfigService);
   await app.listen(config.get<number>('port'));
+
+  app.useLogger(new MyLogger(['log', 'error', 'warn', 'debug', 'verbose']));
 }
 bootstrap();

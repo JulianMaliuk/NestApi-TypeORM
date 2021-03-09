@@ -38,6 +38,7 @@
       "bcrypt": "^5.0.1",
       "class-transformer": "^0.4.0",
       "class-validator": "^0.13.1",
+      "cls-rtracer": "^2.6.0",
       "cross-env": "^7.0.3",
       "mysql2": "^2.2.5",
       "passport": "^0.4.1",

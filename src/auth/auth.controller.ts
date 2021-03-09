@@ -49,7 +49,7 @@ export class AuthController {
   @Get('google')
   @UseGuards(GoogleAuthGuard)
   // eslint-disable-next-line @typescript-eslint/no-empty-function
-  async googleAuth(@Req() req) {}
+  async googleAuth() {}
 
   @Get('google/redirect')
   @UseGuards(GoogleAuthGuard)
