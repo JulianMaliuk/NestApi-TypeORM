@@ -32,7 +32,7 @@ export class AuthController {
 
   @Post('login')
   @UseGuards(LocalAuthGuard)
-  @ApiBody({ type: [UserLoginDto] })
+  @ApiBody({ type: UserLoginDto })
   login(@Request() req) {
     return this.authService.login(req.user);
   }
