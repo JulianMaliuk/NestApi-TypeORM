@@ -7,8 +7,10 @@ import {
   BeforeUpdate,
   Index,
   AfterLoad,
+  OneToMany,
 } from 'typeorm';
 import * as bcrypt from 'bcrypt';
+import { Note } from '../../notes/entities/note.entity';
 
 @Entity('users')
 export class User {
@@ -31,6 +33,9 @@ export class User {
 
   @Column({ default: true })
   isActive: boolean;
+
+  @OneToMany(() => Note, (note) => note.user)
+  notes: Note[];
 
   @BeforeUpdate()
   @BeforeInsert()

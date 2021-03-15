@@ -1,8 +1,7 @@
 import { Logger } from '@nestjs/common';
 import { Request, Response, NextFunction } from 'express';
-import { id as rTracerId } from 'cls-rtracer';
 
-const logger = new Logger('HTTP_REQUEST');
+const logger = new Logger('HTTP_REQUEST', true);
 export const requestLogger = async (
   req: Request,
   res: Response,
