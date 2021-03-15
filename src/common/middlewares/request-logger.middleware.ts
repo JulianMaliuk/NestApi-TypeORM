@@ -8,6 +8,7 @@ export const requestLogger = async (
   next: NextFunction,
 ) => {
   const { method, originalUrl: url } = req;
+  if (url.match(/^\/api\/.*/)) return next();
   const userAgent = req.get('user-agent') || '';
 
   res.on('close', () => {
