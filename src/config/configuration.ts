@@ -4,4 +4,5 @@ export default () => ({
     secret: process.env.JWT_SECRET || 'secret',
     expiresIn: process.env.JWT_EXPIRES_IN || '1y',
   },
+  env: process.env.NODE_ENV || '',
 });

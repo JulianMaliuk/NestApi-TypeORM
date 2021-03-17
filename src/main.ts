@@ -11,6 +11,7 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
     logger: ['log', 'error', 'warn', 'debug', 'verbose'],
   });
+  const config = app.get(ConfigService);
 
   // app.setGlobalPrefix('api');
   app.use(rTracer());
@@ -36,7 +37,6 @@ async function bootstrap() {
     }),
   );
 
-  const config = app.get(ConfigService);
   await app.listen(config.get<number>('port'));
 
   app.useLogger(new MyLogger(['log', 'error', 'warn', 'debug', 'verbose']));
