@@ -6,7 +6,6 @@ import {
   BeforeInsert,
   BeforeUpdate,
   Index,
-  AfterLoad,
   OneToMany,
 } from 'typeorm';
 import * as bcrypt from 'bcrypt';
