@@ -1,13 +1,64 @@
-version: '3'
+version: '3.7'
+
 services:
-
-  mysql:
-    image: "mysql:5.7.10"
+  main:
+    container_name: main
+    build:
+      context: .
+      target: development #production
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
     ports:
-      - "3306:3306"
-    environment:
-      MYSQL_ROOT_PASSWORD: "admin"
-      MYSQL_USER: "test"
-      MYSQL_PASSWORD: "test"
-      MYSQL_DATABASE: "test"
+      - ${PORT}:${PORT}
+      - 9229:9229
+    command: npm run start:dev #npm run start:prod
+    restart: always
+    env_file:
+      - .env
+    networks:
+      - webnet
+    depends_on:
+      - db
 
+  admin:
+    container_name: admin
+    image: phpmyadmin/phpmyadmin:latest
+    restart: always
+    env_file:
+      - .env
+    links:
+     - db:db
+    depends_on:
+     - db
+    ports:
+     - "8080:80"
+    networks:
+      - webnet
+
+  db:
+    container_name: mariadb
+    image: mariadb:latest
+    restart: always
+    env_file:
+      - .env
+    networks:
+      - webnet
+    ports:
+      - ${MYSQL_PORT}:${MYSQL_PORT}
+    environment:
+      MYSQL_TCP_PORT: ${MYSQL_PORT}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DB_NAME}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_ALLOW_EMPTY_PASSWORD: ok
+
+    volumes:
+      - db-volume:/var/lib/mysql
+
+networks:
+  webnet:
+    # driver: bridge
+volumes:
+  db-volume:
