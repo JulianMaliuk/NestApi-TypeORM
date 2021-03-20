@@ -8,6 +8,7 @@ import { AuthModule } from './auth/auth.module';
 import configuration from './config/configuration';
 import { getDbConnectionOptions } from './common/utils';
 import { NotesModule } from './notes/notes.module';
+import { TodosModule } from './todos/todos.module';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { NotesModule } from './notes/notes.module';
     UsersModule,
     AuthModule,
     NotesModule,
+    TodosModule,
   ],
   controllers: [AppController],
   providers: [AppService],

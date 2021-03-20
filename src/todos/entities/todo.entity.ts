@@ -8,19 +8,16 @@ import {
 } from 'typeorm';
 import { User } from '../../users/entities/user.entity';
 
-@Entity('notes')
-export class Note {
+@Entity('todos')
+export class Todo {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
-  title: string;
-
-  @Column({ nullable: true, type: 'text' })
+  @Column({ type: 'text' })
   text: string;
 
-  @Column({ nullable: true })
-  color?: string;
+  @Column({ type: 'boolean', default: false })
+  done: boolean;
 
   @CreateDateColumn()
   createdAt: Date;
@@ -28,6 +25,6 @@ export class Note {
   @UpdateDateColumn()
   updatedAt: Date;
 
-  @ManyToOne(() => User, (user) => user.notes)
+  @ManyToOne(() => User, (user) => user.todos)
   user: User;
 }
