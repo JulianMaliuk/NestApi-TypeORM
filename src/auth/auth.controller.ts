@@ -4,12 +4,14 @@ import {
   Controller,
   Post,
   UseGuards,
-  Request,
   Req,
   UnauthorizedException,
   Get,
+  Res,
+  Patch,
 } from '@nestjs/common';
-import { ApiBody, ApiTags } from '@nestjs/swagger';
+import { Request, Response } from 'express';
+import { ApiBearerAuth, ApiBody, ApiTags } from '@nestjs/swagger';
 import { UsersService } from '../users/users.service';
 import { UserCreateDto } from '../users/dto/create-user.dto';
 import { AuthService } from './auth.service';
@@ -21,6 +23,7 @@ import { UserChangePasswordDto } from '../users/dto/change-password.dto';
 import { User } from '../users/entities/user.entity';
 import { UserLoginDto } from '../users/dto/login-user.dto';
 import { GoogleAuthGuard } from './google-auth.guard';
+import { UserUpdateDto } from '../users/dto/update-user.dto';
 
 @Controller('auth')
 @ApiTags('Auth')
@@ -33,11 +36,13 @@ export class AuthController {
   @Post('login')
   @UseGuards(LocalAuthGuard)
   @ApiBody({ type: UserLoginDto })
-  login(@Request() req) {
-    return this.authService.login(req.user);
+  async login(@Req() req, @Res({ passthrough: true }) res: Response) {
+    const result = await this.authService.login(req.user);
+    res.cookie('access_token', result.access_token);
+    return result;
   }
 
-  @Post('register')
+  @Post('registration')
   async register(@Body() userCreateDto: UserCreateDto) {
     const user = await this.usersService.findUserForAuth(
       userCreateDto.username,
@@ -53,8 +58,13 @@ export class AuthController {
 
   @Get('google/redirect')
   @UseGuards(GoogleAuthGuard)
-  googleAuthRedirect(@Req() req) {
-    return this.authService.googleLogin(req);
+  async googleAuthRedirect(
+    @Req() req,
+    @Res({ passthrough: true }) res: Response,
+  ) {
+    const result = await this.authService.login(req.user);
+    res.cookie('access_token', result.access_token);
+    return result;
   }
 
   @Post('changePassword')
@@ -76,5 +86,27 @@ export class AuthController {
       return this.usersService.update(id, user);
     }
     return new UnauthorizedException();
+  }
+
+  @Post('logout')
+  async logout(@Res({ passthrough: true }) res: Response) {
+    res.clearCookie('access_token');
+    return {
+      success: true,
+    };
+  }
+
+  @Get('profile')
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard)
+  getProfile(@Req() req) {
+    return this.usersService.findOne(req.user.id);
+  }
+
+  @Patch('profile')
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard)
+  update(@Req() req, @Body() userUpdateDto: UserUpdateDto) {
+    return this.usersService.update(req.user.id, userUpdateDto);
   }
 }
