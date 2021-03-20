@@ -24,7 +24,10 @@ export class NotesService {
   }
 
   findAll(userId: number) {
-    return this.noteRepo.find({ where: { user: { id: userId } } });
+    return this.noteRepo.find({
+      where: { user: { id: userId } },
+      order: { updatedAt: 'DESC' },
+    });
   }
 
   async findOne(id: number, userId: number) {
@@ -57,7 +60,7 @@ export class NotesService {
     if (!note) {
       throw new HttpException(`Note doesn't exist`, HttpStatus.BAD_REQUEST);
     }
-    await this.noteRepo.delete(note);
+    await this.noteRepo.delete(note.id);
     return {
       deleted: true,
     };
