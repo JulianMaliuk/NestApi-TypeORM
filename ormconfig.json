@@ -2,14 +2,14 @@
    {
       "name": "default",
       "type": "mysql",
-      "host": "db",
+      "host": "localhost",
       "port": 3306,
       "username": "julian",
       "password": "1111",
       "database": "nest-api-01",
       "synchronize": true,
       "autoLoadEntities": true,
-      "logging": true,
+      "logging": false,
       "entities": ["dist/**/entities/**/*{.ts,.js}"],
       "migrations": ["dist/**/migration/**/*{.ts,.js}"],
       "subscribers": ["src/**/subscriber/**/*.ts"]
@@ -17,7 +17,7 @@
    {
       "name": "production",
       "type": "mysql",
-      "host": "db",
+      "host": "localhost",
       "port": 3306,
       "username": "julian",
       "password": "1111",

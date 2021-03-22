@@ -27,7 +27,7 @@ async function bootstrap() {
     .addBearerAuth({ type: 'http', scheme: 'bearer', bearerFormat: 'JWT' })
     .build();
   const document = SwaggerModule.createDocument(app, options);
-  SwaggerModule.setup('api', app, document, {
+  SwaggerModule.setup('doc', app, document, {
     swaggerOptions: {
       persistAuthorization: true,
     },
