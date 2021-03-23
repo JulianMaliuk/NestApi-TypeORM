@@ -5,6 +5,7 @@
    "author": "",
    "private": true,
    "license": "UNLICENSED",
+   "process_name": "my-space-api",
    "scripts": {
       "prebuild": "rimraf dist",
       "build": "nest build",
@@ -23,7 +24,10 @@
       "test:watch": "jest --watch",
       "test:cov": "jest --coverage",
       "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-      "test:e2e": "jest --config ./test/jest-e2e.json"
+      "test:e2e": "jest --config ./test/jest-e2e.json",
+      "pm2:start": "pm2 start npm --name $npm_package_process_name --watch -- run start:prod",
+      "pm2:restart": "pm2 restart ",
+      "pm2:delete": "pm2 delete $npm_package_process_name"
    },
    "dependencies": {
       "@nestjs/common": "^7.6.13",
