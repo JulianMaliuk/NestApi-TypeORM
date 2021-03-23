@@ -26,7 +26,7 @@
       "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
       "test:e2e": "jest --config ./test/jest-e2e.json",
       "pm2:start": "pm2 start npm --name $npm_package_process_name --watch -- run start:prod",
-      "pm2:restart": "pm2 restart ",
+      "pm2:restart": "pm2 restart $npm_package_process_name",
       "pm2:delete": "pm2 delete $npm_package_process_name"
    },
    "dependencies": {
